@@ -24,18 +24,18 @@ body {
 
 .clock .time-box {
   display: inline-block;
-  margin: 50px;
+  margin: 0 10px;
 }
 
 .clock .time-box .time {
   color: #666;
-  font-size: 20px;
+  font-size: 48px;
   line-height: 130px;
 }
 
 .clock .time-box .time-info {
   color: #ccc;
-  font-size: 10px;
+  font-size: 25px;
   margin-left: 5px;
 }
 
@@ -43,8 +43,8 @@ body {
 
 .circle {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   text-align: center;
 }
 
@@ -54,11 +54,11 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   stroke-dasharray: 255%;
   stroke-dashoffset: 25%;
-  stroke: #8cecbf;
+  stroke: #6fec6f;
   fill: none;
   transform: rotate(-90deg);
 }
@@ -76,5 +76,5 @@ body {
 /* 环形进度条动画 */
 
 .transition-rotate {
-  transition: all 0.5s;
+  transition: all 2s;
 }

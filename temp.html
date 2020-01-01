@@ -24,7 +24,7 @@
     }
 
     .second {
-        animation: run 60s infinite linear;
+        /* animation-name: run 60s infinite linear; */
     }
     .minute {
         animation: run 600s infinite linear;
@@ -163,23 +163,51 @@
     </div>
 
     <script>
-        let secondCircle = document.querySelector('.second')
-        let len = 2*(secondCircle.getAttribute('r'))*Math.PI
+        let date = new Date;
+        let seconds = date.getSeconds();
+        let minutes = date.getMinutes();
+        let hours = date.getHours();
+        hours = (hours > 12) ? hours - 12 : hours;
+        
+        let circle = document.querySelector('.second');
+        let len = 2*(circle.getAttribute('r'))*Math.PI;
 
-        secondCircle.style.strokeDasharray = len
-        secondCircle.style.strokeDashoffset = len
+        console.log(len);
 
-        let hourCircle = document.querySelector('.hour')
+        let hourLen = len - (len/12)*hours;
+        let minuteLen = len - (len/60)*minutes;
+        let secondLen = len - (len/60)*seconds;
 
-        hourCircle.style.strokeDasharray = len
-        hourCircle.style.strokeDashoffset = len
+        console.log(hours,minutes,seconds);
 
-        let minuteCircle = document.querySelector('.minute')
+        let hourCircle = document.querySelector('.hour');
+        let minuteCircle = document.querySelector('.minute');
+        let secondCircle = document.querySelector('.second');
+    
+        hourCircle.style.strokeDasharray = len;
+        minuteCircle.style.strokeDasharray = len;
+        secondCircle.style.strokeDasharray = len;
 
-        minuteCircle.style.strokeDasharray = len
-        minuteCircle.style.strokeDashoffset = len
+        hourCircle.style.strokeDashoffset = hourLen;
+        minuteCircle.style.strokeDashoffset = minuteLen;
 
-        console.log(len)
+        if(seconds==0){
+            secondCircle.style.animation = 'run 60s infinite linear';
+            secondCircle.style.strokeDashoffset = len;
+        } else {
+            let s = 60-seconds
+            secondCircle.style.strokeDashoffset = secondLen;
+            secondCircle.style.animation = `run ${s}s infinite linear`;
+            let secondsInter = setInterval(function(){
+            s--;
+            if(s==0) {
+                clearInterval(secondsInter);
+                secondCircle.style.strokeDashoffset = len;
+                secondCircle.style.animation = 'run 60s infinite linear';
+                }
+            } ,1000)
+        }
+        
     </script>
 </body>
 </html>
