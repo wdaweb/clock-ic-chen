@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>時鐘</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <style>
+    body {
+        background: #292E49;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(#292E49, #536976, #BBD2C5);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(#292E49, #536976, #BBD2C5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    .circle {
+        box-sizing: border-box;
+    }
+    .circle svg {
+        transform: rotate(-90deg);
+    }
+
+    .second {
+        animation: run 60s infinite linear;
+    }
+    .hour {
+        animation: run 60s infinite linear;
+    }
+    @keyframes run {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    .dot {
+        margin: 0 auto 0;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        z-index: 100;
+        top: 45px;
+        left: 160px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 2px 1px #fff, 0 0 4px 0px #fff, 0 0 11px 4px #fff;
+        transform-origin: 50% 105px;
+        animation: spin 60s infinite linear;
+    }
+    @keyframes spin { 
+        to { 
+            transform: rotate(1turn); 
+        } 
+    }
+
+    .time {
+        position: relative;
+        top: 0px;
+    }
+    
+    </style>
+</head>
+<body>
+    <div class="container vw-100 vh-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="circle">
+                    <svg x="0px" y="0px" width="300px" height="300px">
+                        <defs>
+                            <filter id="hourglow">
+                                <fegaussianblur class="blur" result="coloredBlur" stddeviation="2.5"></fegaussianblur>
+                                <femerge>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="SourceGraphic"></femergenode>
+                                </femerge>
+                            </filter>
+                        </defs>
+                        <circle 
+                        class="hourPath"
+                        stroke="#BBD2C5"
+                        fill="none" 
+                        stroke-width="1"
+                        cx="150" cy="150" r="100"/>
+                        <circle 
+                        class="hour"
+                        stroke="white"
+                        filter="url(#hourglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="circle">
+                    <svg x="0px" y="0px" width="300px" height="300px">
+                        <circle 
+                        class="minite"
+                        stroke="#BBD2C5" 
+                        fill="none" 
+                        stroke-width="5"
+                        cx="150" cy="150" r="100"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="circle">
+                    <svg x="0px" y="0px" width="300px" height="300px">
+                        <defs>
+                            <filter id="secondglow">
+                                <fegaussianblur class="blur" result="coloredBlur" stddeviation="2.5"></fegaussianblur>
+                                <femerge>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="SourceGraphic"></femergenode>
+                                </femerge>
+                            </filter>
+                        </defs>
+                        <circle 
+                        class="secondPath"
+                        stroke="#BBD2C5"
+                        fill="none" 
+                        stroke-width="1"
+                        cx="150" cy="150" r="100"/>
+                        <circle 
+                        class="second"
+                        stroke="white"
+                        filter="url(#secondglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100"/>
+                    </svg>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let secondCircle = document.querySelector('.second')
+        let secondlen = 2*(secondCircle.getAttribute('r'))*Math.PI
+
+        secondCircle.style.strokeDasharray = secondlen
+        secondCircle.style.strokeDashoffset = secondlen
+
+        let hourCircle = document.querySelector('.hour')
+        let hourlen = 2*(secondCircle.getAttribute('r'))*Math.PI
+
+        hourCircle.style.strokeDasharray = hourlen
+        hourCircle.style.strokeDashoffset = hourlen
+
+        console.log(len)
+    </script>
+</body>
+</html>

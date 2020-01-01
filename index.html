@@ -1,0 +1,39 @@
+<html>
+
+<head>
+	<title>Parcel Sandbox</title>
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" href="src/index.scss">
+</head>
+
+<body>
+	<div class="clock">
+		<div class="time-box hour circle">
+			<svg class="hourCircle" xmlns="http://www.w3.org/2000/svg">
+				<circle id="hourCircle" class="transition-rotate" cx="50%" cy="50%" r="40%" stroke-width="5%"></circle>
+			</svg>
+			<span id="hourText" class="time">00</span>
+			<span class="time-info">h</span>
+		</div>
+
+		<div class="time-box minute circle">
+			<svg class="minuteCircle" xmlns="http://www.w3.org/2000/svg">
+				<circle id="minuteCircle" class="transition-rotate" cx="50%" cy="50%" r="40%" stroke-width="5%"></circle>
+			</svg>
+			<span id="minuteText" class="time">00</span>
+			<span class="time-info">m</span>
+		</div>
+		
+		<div class="time-box second circle">
+			<svg class="secondCircle" xmlns="http://www.w3.org/2000/svg">
+				<circle id="secondCircle" class="transition-rotate" cx="50%" cy="50%" r="40%" stroke-width="5%"></circle>
+			</svg>
+			<span id="secondText" class="time">00</span>
+			<span class="time-info">s</span>
+		</div>
+	</div>
+
+	<!-- <script src="src/index.js"></script> -->
+</body>
+
+</html>
