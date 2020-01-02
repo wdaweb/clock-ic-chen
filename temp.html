@@ -23,9 +23,9 @@
         transform: rotate(-90deg);
     }
 
-    .second {
-        animation: run 60s infinite linear;
-    }
+    /* .second {
+        animation: run 0.5s infinite linear;
+    } */
     .minute {
         animation: run 600s infinite linear;
     }
@@ -33,9 +33,6 @@
         animation: run 43200s infinite linear;
     }
     /* @keyframes run {
-        from {
-            stroke-dashoffset: 0;
-        }
         to {
             stroke-dashoffset: 0;
         }
@@ -152,71 +149,82 @@
                         stroke-width="1"
                         cx="150" cy="150" r="100"></circle>
                         <circle 
+                        id="second1"
                         class="second"
                         stroke="white"
                         filter="url(#secondglow)"
                         fill="none" 
                         stroke-width="2"
                         cx="150" cy="150" r="100">
-                        <animate id="secAni" attributeName="stroke-dashoffset" values="628;0" dur="60s" repeatCount="indefinite" />
+                        <animate id="ani1" attributeName="stroke-dashoffset" from="628" to="0" dur="60s" repeatCount="indefinite" />
                         </circle>
+                        <!-- <circle
+                        id="second2" 
+                        class="second"
+                        stroke="white"
+                        filter="url(#secondglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100">
+                        <animate id="ani2" attributeName="stroke-dashoffset" from="628" to="0" dur="60s" repeatCount="indefinite" />
+                        </circle> -->
                     </svg>
-                    <div class="dot"></div>
+                    <!-- <div class="dot"></div> -->
                 </div>
             </div>
         </div>
     </div>
 
+<script src="./js/jquery-3.4.1.min.js"></script>
+<!-- <script src="./js/d3.min.js"></script> -->
 <script>
+$(function(){
+
     // 求圓周
-    let circle = document.querySelector('.second');
-    let len = 2*(circle.getAttribute('r'))*Math.PI;
-    console.log(len);
+    let len = 2*($('.second').attr('r'))*Math.PI
+    console.log(len)
 
-    let hourCircle = document.querySelector('.hour');
-    let minuteCircle = document.querySelector('.minute');
-    let secondCircle = document.querySelector('.second');
-
-    hourCircle.style.strokeDasharray = len;
-    minuteCircle.style.strokeDasharray = len;
-    secondCircle.style.strokeDasharray = len;
+    $('.second').css('stroke-dasharray', `${len}`)
 
     // 取日期
-    let date = new Date;
-    let seconds = date.getSeconds();
-    let minutes = date.getMinutes();
-    let hours = date.getHours();
-    hours = (hours > 12) ? hours - 12 : hours;
+    let date = new Date
+    let seconds = date.getSeconds()
+    let minutes = date.getMinutes()
+    let hours = date.getHours()
+    hours = (hours > 12) ? hours - 12 : hours
 
     let hourLen = len - (len/12)*hours;
     let minuteLen = len - (len/60)*minutes;
     let secondLen = len - (len/60)*seconds;
 
-    console.log(hours,minutes,seconds);
+    // console.log(hours,minutes,seconds);
 
     if(seconds==0){
-        let ani = document.querySelector('#secAni');
-        ani.setAttribute('values',`628;0`);
-        ani.setAttribute('dur',`60s`);
+        $('#second1').show()
+        $('#second2').hide()
+        ('#ani1').attr('from',`${len}`)
     }else{
-        secondProgress();
-        function secondProgress(){
-        let ani = document.querySelector('#secAni');
-        ani.setAttribute('values',`${secondLen};0`);
-        ani.setAttribute('dur',`${60-seconds}s`);
-            setInterval(() => {
-                secondProgress();
-                if(seconds==0){
-                    clearInterval(secondProgress);
-                }
-            }, 1000);
+        $('#second1').show();
+        $('#second2').hide();
 
-        }
+        let s = 60-seconds;
+        ('#ani1').attr('from',`${secondLen}`)
+        ('#ani1').attr('dur',`${s}s`)
+
+        ('#ani2').attr('from',`${len}`)
+
+        let timer = setInterval(()=>{
+            s--;
+            if(s==0){
+                clearInterval(timer)
+                $('#second1').hide()
+                $('#second2').show()
+            }
+        },1000)
     }
 
-    // hourCircle.style.strokeDashoffset = hourLen;
-    // minuteCircle.style.strokeDashoffset = minuteLen;
-    // secondCircle.style.strokeDashoffset = secondLen;
+})
+    
     
     // 將 runkeyframes 放入 style
     // let style = document.createElement('style');
@@ -226,26 +234,31 @@
     //         stroke-dashoffset: ${len};
     //     }
     //     to {
-    //         stroke-dashoffset: 0;
+    //         stroke-dashoffset: ${secondLen};
     //     }
     // }`
     // style.innerHTML = runkeyframes;
     // document.getElementsByTagName('head')[0].appendChild(style);
+    // secondCircle.style.animation = 'run 1s infinite linear';
+
 
     // if(seconds==0){
     //     secondCircle.style.animation = 'run 60s infinite linear';
     //     secondCircle.style.strokeDashoffset = len;
     // } else {
-    //     let s = 60-seconds
-    //     secondCircle.style.strokeDashoffset = secondLen;
-    //     secondCircle.style.animation = `run ${s}s infinite linear`;
     //     let secondsInter = setInterval(function(){
-    //     s--;
-    //     if(s==0) {
-    //         clearInterval(secondsInter);
-    //         secondCircle.style.strokeDashoffset = len;
-    //         secondCircle.style.animation = 'run 60s infinite linear';
-    //         }
+    //         let nowsec = date.getSeconds();
+    //         let nowlen = len - (len/60)*nowsec;
+    //         let s = 60-nowsec;
+    //         secondCircle.style.strokeDashoffset = secondLen;
+    //         secondCircle.style.animation = `run ${s}s infinite linear`;
+    //         if(s==0) {
+    //             clearInterval(secondsInter);
+    //             secondCircle.style.strokeDashoffset = '';
+    //             secondCircle.style.animation = '';
+    //             secondCircle.style.strokeDashoffset = len;
+    //             secondCircle.style.animation = 'run 60s infinite linear';
+    //             }
     //     } ,1000)
     // }
 </script>
