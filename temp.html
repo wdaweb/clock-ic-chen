@@ -24,7 +24,7 @@
     }
 
     .second {
-        /* animation-name: run 60s infinite linear; */
+        animation: run 60s infinite linear;
     }
     .minute {
         animation: run 600s infinite linear;
@@ -32,11 +32,14 @@
     .hour {
         animation: run 43200s infinite linear;
     }
-    @keyframes run {
+    /* @keyframes run {
+        from {
+            stroke-dashoffset: 0;
+        }
         to {
             stroke-dashoffset: 0;
         }
-    }
+    } */
 
     .dot {
         margin: 0 auto 0;
@@ -87,14 +90,14 @@
                         stroke="#BBD2C5"
                         fill="none" 
                         stroke-width="1"
-                        cx="150" cy="150" r="100"/>
+                        cx="150" cy="150" r="100"></circle>
                         <circle 
                         class="hour"
                         stroke="white"
                         filter="url(#hourglow)"
                         fill="none" 
                         stroke-width="2"
-                        cx="150" cy="150" r="100"/>
+                        cx="150" cy="150" r="100"></circle>
                     </svg>
                 </div>
             </div>
@@ -117,14 +120,14 @@
                         stroke="#BBD2C5"
                         fill="none" 
                         stroke-width="1"
-                        cx="150" cy="150" r="100"/>
+                        cx="150" cy="150" r="100"></circle>
                         <circle 
                         class="minute"
                         stroke="white"
                         filter="url(#minuteglow)"
                         fill="none" 
                         stroke-width="2"
-                        cx="150" cy="150" r="100"/>
+                        cx="150" cy="150" r="100"></circle>
                     </svg>
                 </div>
             </div>
@@ -147,14 +150,16 @@
                         stroke="#BBD2C5"
                         fill="none" 
                         stroke-width="1"
-                        cx="150" cy="150" r="100"/>
+                        cx="150" cy="150" r="100"></circle>
                         <circle 
                         class="second"
                         stroke="white"
                         filter="url(#secondglow)"
                         fill="none" 
                         stroke-width="2"
-                        cx="150" cy="150" r="100"/>
+                        cx="150" cy="150" r="100">
+                        <animate id="secAni" attributeName="stroke-dashoffset" values="628;0" dur="60s" repeatCount="indefinite" />
+                        </circle>
                     </svg>
                     <div class="dot"></div>
                 </div>
@@ -162,52 +167,87 @@
         </div>
     </div>
 
-    <script>
-        let date = new Date;
-        let seconds = date.getSeconds();
-        let minutes = date.getMinutes();
-        let hours = date.getHours();
-        hours = (hours > 12) ? hours - 12 : hours;
-        
-        let circle = document.querySelector('.second');
-        let len = 2*(circle.getAttribute('r'))*Math.PI;
+<script>
+    // 求圓周
+    let circle = document.querySelector('.second');
+    let len = 2*(circle.getAttribute('r'))*Math.PI;
+    console.log(len);
 
-        console.log(len);
+    let hourCircle = document.querySelector('.hour');
+    let minuteCircle = document.querySelector('.minute');
+    let secondCircle = document.querySelector('.second');
 
-        let hourLen = len - (len/12)*hours;
-        let minuteLen = len - (len/60)*minutes;
-        let secondLen = len - (len/60)*seconds;
+    hourCircle.style.strokeDasharray = len;
+    minuteCircle.style.strokeDasharray = len;
+    secondCircle.style.strokeDasharray = len;
 
-        console.log(hours,minutes,seconds);
+    // 取日期
+    let date = new Date;
+    let seconds = date.getSeconds();
+    let minutes = date.getMinutes();
+    let hours = date.getHours();
+    hours = (hours > 12) ? hours - 12 : hours;
 
-        let hourCircle = document.querySelector('.hour');
-        let minuteCircle = document.querySelector('.minute');
-        let secondCircle = document.querySelector('.second');
-    
-        hourCircle.style.strokeDasharray = len;
-        minuteCircle.style.strokeDasharray = len;
-        secondCircle.style.strokeDasharray = len;
+    let hourLen = len - (len/12)*hours;
+    let minuteLen = len - (len/60)*minutes;
+    let secondLen = len - (len/60)*seconds;
 
-        hourCircle.style.strokeDashoffset = hourLen;
-        minuteCircle.style.strokeDashoffset = minuteLen;
+    console.log(hours,minutes,seconds);
 
-        if(seconds==0){
-            secondCircle.style.animation = 'run 60s infinite linear';
-            secondCircle.style.strokeDashoffset = len;
-        } else {
-            let s = 60-seconds
-            secondCircle.style.strokeDashoffset = secondLen;
-            secondCircle.style.animation = `run ${s}s infinite linear`;
-            let secondsInter = setInterval(function(){
-            s--;
-            if(s==0) {
-                clearInterval(secondsInter);
-                secondCircle.style.strokeDashoffset = len;
-                secondCircle.style.animation = 'run 60s infinite linear';
+    if(seconds==0){
+        let ani = document.querySelector('#secAni');
+        ani.setAttribute('values',`628;0`);
+        ani.setAttribute('dur',`60s`);
+    }else{
+        secondProgress();
+        function secondProgress(){
+        let ani = document.querySelector('#secAni');
+        ani.setAttribute('values',`${secondLen};0`);
+        ani.setAttribute('dur',`${60-seconds}s`);
+            setInterval(() => {
+                secondProgress();
+                if(seconds==0){
+                    clearInterval(secondProgress);
                 }
-            } ,1000)
+            }, 1000);
+
         }
-        
-    </script>
+    }
+
+    // hourCircle.style.strokeDashoffset = hourLen;
+    // minuteCircle.style.strokeDashoffset = minuteLen;
+    // secondCircle.style.strokeDashoffset = secondLen;
+    
+    // 將 runkeyframes 放入 style
+    // let style = document.createElement('style');
+    // style.type = 'text/css';
+    // let runkeyframes =`@keyframes run {
+    //     from {
+    //         stroke-dashoffset: ${len};
+    //     }
+    //     to {
+    //         stroke-dashoffset: 0;
+    //     }
+    // }`
+    // style.innerHTML = runkeyframes;
+    // document.getElementsByTagName('head')[0].appendChild(style);
+
+    // if(seconds==0){
+    //     secondCircle.style.animation = 'run 60s infinite linear';
+    //     secondCircle.style.strokeDashoffset = len;
+    // } else {
+    //     let s = 60-seconds
+    //     secondCircle.style.strokeDashoffset = secondLen;
+    //     secondCircle.style.animation = `run ${s}s infinite linear`;
+    //     let secondsInter = setInterval(function(){
+    //     s--;
+    //     if(s==0) {
+    //         clearInterval(secondsInter);
+    //         secondCircle.style.strokeDashoffset = len;
+    //         secondCircle.style.animation = 'run 60s infinite linear';
+    //         }
+    //     } ,1000)
+    // }
+</script>
 </body>
 </html>
