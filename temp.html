@@ -179,38 +179,11 @@
 <script src="./js/anime.min.js"></script>
 <script>
 $(function(){
-    $('#second1').show()
-    $('#second2').hide()
-
     // 求圓周
     let len = 2*($('.second').attr('r'))*Math.PI
     console.log(len)
 
     $('.second').css('stroke-dasharray', `${len}`)
-
-    anime({
-        targets: '#second1',
-        strokeDashoffset: [400, 0],
-        loop: true,
-        easing: 'linear'
-    });
-
-    // let second = anime.timeline({
-    //     targets: '#second1',
-    //     duration: 2000,
-    // })
-
-    // second
-    // .add({
-    //     strokeDashoffset: [400, 0],
-    //     easing: 'linear',
-    //     loop: 1
-    // })
-    // .add({
-    //     strokeDashoffset: [len, 0],
-    //     easing: 'easeOutElastic(1, 2)',
-    //     loop: true
-    // })
 
     // 取日期
     let date = new Date
@@ -223,23 +196,39 @@ $(function(){
     let minuteLen = len - (len/60)*minutes;
     let secondLen = len - (len/60)*seconds;
 
-    // console.log(hours,minutes,seconds);
+    $('#second1').show()
+    $('#second2').hide()
 
-    // 將 runkeyframes 放入 style
-    // let style = document.createElement('style');
-    // style.type = 'text/css';
-    // let runkeyframes =`@keyframes run {
-    //     from {
-    //         stroke-dashoffset: ${len};
-    //     }
-    //     to {
-    //         stroke-dashoffset: ${secondLen};
-    //     }
-    // }`
-    // style.innerHTML = runkeyframes;
-    // document.getElementsByTagName('head')[0].appendChild(style);
-    // secondCircle.style.animation = 'run 1s infinite linear';
+    if(seconds==0){
+        anime({
+            targets: '#second1',
+            strokeDashoffset: [len, 0],
+            loop: true,
+            easing: 'linear',
+            duration: 2000
+        })
+    }else{
+        anime({
+            targets: '#second1',
+            strokeDashoffset: [secondLen, 0],
+            loop: 1,
+            easing: 'linear',
+            duration: 2000
+        })
 
+        anime({
+            targets: '#second2',
+            strokeDashoffset: [len, 0],
+            loop: true,
+            easing: 'linear',
+            duration: 2000
+        })
+        setTimeout(() => {
+            $('#second1').hide()
+            $('#second2').show()
+        }, 2000);
+    }
+    
 })
 </script>
 </body>
