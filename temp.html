@@ -156,9 +156,9 @@
                         fill="none" 
                         stroke-width="2"
                         cx="150" cy="150" r="100">
-                        <animate id="ani1" attributeName="stroke-dashoffset" from="628" to="0" dur="60s" repeatCount="indefinite" />
+                        <!-- <animate id="ani1" attributeName="stroke-dashoffset" from="628" to="0" dur="60s" repeatCount="indefinite" /> -->
                         </circle>
-                        <!-- <circle
+                        <circle
                         id="second2" 
                         class="second"
                         stroke="white"
@@ -166,8 +166,8 @@
                         fill="none" 
                         stroke-width="2"
                         cx="150" cy="150" r="100">
-                        <animate id="ani2" attributeName="stroke-dashoffset" from="628" to="0" dur="60s" repeatCount="indefinite" />
-                        </circle> -->
+                        <!-- <animate id="ani2" attributeName="stroke-dashoffset" from="628" to="0" dur="60s" repeatCount="indefinite" /> -->
+                        </circle>
                     </svg>
                     <!-- <div class="dot"></div> -->
                 </div>
@@ -175,16 +175,42 @@
         </div>
     </div>
 
-<script src="./js/jquery-3.4.1.min.js"></script>
-<!-- <script src="./js/d3.min.js"></script> -->
+<script src="./js/jquery-3.4.1.slim.min.js"></script>
+<script src="./js/anime.min.js"></script>
 <script>
 $(function(){
+    $('#second1').show()
+    $('#second2').hide()
 
     // 求圓周
     let len = 2*($('.second').attr('r'))*Math.PI
     console.log(len)
 
     $('.second').css('stroke-dasharray', `${len}`)
+
+    anime({
+        targets: '#second1',
+        strokeDashoffset: [400, 0],
+        loop: true,
+        easing: 'linear'
+    });
+
+    // let second = anime.timeline({
+    //     targets: '#second1',
+    //     duration: 2000,
+    // })
+
+    // second
+    // .add({
+    //     strokeDashoffset: [400, 0],
+    //     easing: 'linear',
+    //     loop: 1
+    // })
+    // .add({
+    //     strokeDashoffset: [len, 0],
+    //     easing: 'easeOutElastic(1, 2)',
+    //     loop: true
+    // })
 
     // 取日期
     let date = new Date
@@ -199,33 +225,6 @@ $(function(){
 
     // console.log(hours,minutes,seconds);
 
-    if(seconds==0){
-        $('#second1').show()
-        $('#second2').hide()
-        ('#ani1').attr('from',`${len}`)
-    }else{
-        $('#second1').show();
-        $('#second2').hide();
-
-        let s = 60-seconds;
-        ('#ani1').attr('from',`${secondLen}`)
-        ('#ani1').attr('dur',`${s}s`)
-
-        ('#ani2').attr('from',`${len}`)
-
-        let timer = setInterval(()=>{
-            s--;
-            if(s==0){
-                clearInterval(timer)
-                $('#second1').hide()
-                $('#second2').show()
-            }
-        },1000)
-    }
-
-})
-    
-    
     // 將 runkeyframes 放入 style
     // let style = document.createElement('style');
     // style.type = 'text/css';
@@ -241,26 +240,7 @@ $(function(){
     // document.getElementsByTagName('head')[0].appendChild(style);
     // secondCircle.style.animation = 'run 1s infinite linear';
 
-
-    // if(seconds==0){
-    //     secondCircle.style.animation = 'run 60s infinite linear';
-    //     secondCircle.style.strokeDashoffset = len;
-    // } else {
-    //     let secondsInter = setInterval(function(){
-    //         let nowsec = date.getSeconds();
-    //         let nowlen = len - (len/60)*nowsec;
-    //         let s = 60-nowsec;
-    //         secondCircle.style.strokeDashoffset = secondLen;
-    //         secondCircle.style.animation = `run ${s}s infinite linear`;
-    //         if(s==0) {
-    //             clearInterval(secondsInter);
-    //             secondCircle.style.strokeDashoffset = '';
-    //             secondCircle.style.animation = '';
-    //             secondCircle.style.strokeDashoffset = len;
-    //             secondCircle.style.animation = 'run 60s infinite linear';
-    //             }
-    //     } ,1000)
-    // }
+})
 </script>
 </body>
 </html>
