@@ -23,22 +23,7 @@
         transform: rotate(-90deg);
     }
 
-    /* .second {
-        animation: run 0.5s infinite linear;
-    } */
-    .minute {
-        animation: run 600s infinite linear;
-    }
-    .hour {
-        animation: run 43200s infinite linear;
-    }
-    /* @keyframes run {
-        to {
-            stroke-dashoffset: 0;
-        }
-    } */
-
-    .dot {
+    #secdot1, #secdot2 {
         margin: 0 auto 0;
         width: 10px;
         height: 10px;
@@ -50,12 +35,6 @@
         border-radius: 50%;
         box-shadow: 0 0 2px 1px #fff, 0 0 4px 0px #fff, 0 0 11px 4px #fff;
         transform-origin: 50% 105px;
-        animation: spin 60s infinite linear;
-    }
-    @keyframes spin { 
-        to { 
-            transform: rotate(1turn); 
-        } 
     }
 
     .time {
@@ -156,7 +135,6 @@
                         fill="none" 
                         stroke-width="2"
                         cx="150" cy="150" r="100">
-                        <!-- <animate id="ani1" attributeName="stroke-dashoffset" from="628" to="0" dur="60s" repeatCount="indefinite" /> -->
                         </circle>
                         <circle
                         id="second2" 
@@ -166,10 +144,10 @@
                         fill="none" 
                         stroke-width="2"
                         cx="150" cy="150" r="100">
-                        <!-- <animate id="ani2" attributeName="stroke-dashoffset" from="628" to="0" dur="60s" repeatCount="indefinite" /> -->
                         </circle>
                     </svg>
-                    <!-- <div class="dot"></div> -->
+                    <div id="secdot1"></div>
+                    <div id="secdot2"></div>
                 </div>
             </div>
         </div>
@@ -196,16 +174,27 @@ $(function(){
     let minuteLen = len - (len/60)*minutes;
     let secondLen = len - (len/60)*seconds;
 
+    // 秒數旋轉
     $('#second1').show()
     $('#second2').hide()
-
+    // 秒數圓點
+    $('#secdot1').show()
+    $('#secdot2').hide()
+    let s = (60-seconds)*1000
     if(seconds==0){
         anime({
             targets: '#second1',
             strokeDashoffset: [len, 0],
             loop: true,
             easing: 'linear',
-            duration: 2000
+            duration: 60000
+        })
+        anime({
+            targets: '#secdot1',
+            rotate: [0, 360],
+            loop: true,
+            easing: 'linear',
+            duration: 60000
         })
     }else{
         anime({
@@ -213,21 +202,38 @@ $(function(){
             strokeDashoffset: [secondLen, 0],
             loop: 1,
             easing: 'linear',
-            duration: 2000
+            duration: s
         })
-
         anime({
-            targets: '#second2',
-            strokeDashoffset: [len, 0],
-            loop: true,
+            targets: '#secdot1',
+            rotate: [6*seconds, 360],
+            loop: 1,
             easing: 'linear',
-            duration: 2000
+            duration: s
         })
         setTimeout(() => {
+            anime({
+                targets: '#second2',
+                strokeDashoffset: [len, 0],
+                loop: true,
+                easing: 'linear',
+                duration: 60000
+            })
             $('#second1').hide()
             $('#second2').show()
-        }, 2000);
+            anime({
+                targets: '#secdot2',
+                rotate: [0, 360],
+                loop: true,
+                easing: 'linear',
+                duration: 60000
+            })
+            $('#secdot1').hide()
+            $('#secdot2').show()
+        }, s)
     }
+
+    
     
 })
 </script>
