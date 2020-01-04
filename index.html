@@ -1,39 +1,337 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Parcel Sandbox</title>
-	<meta charset="UTF-8" />
-	<link rel="stylesheet" href="src/index.scss">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>時鐘</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <style>
+    body {
+        background: #292E49;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(#292E49, #536976, #BBD2C5);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(#292E49, #536976, #BBD2C5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        /* background-size: cover;
+        background-position: center; */
+        /* background-repeat: no-repeat; */
+        background-attachment: fixed;
+        background-size: 100% 400%;
+        animation-name: bg;
+        animation-duration: 17s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+    @keyframes bg {
+        0% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 0% 70%;
+        }
+    }
+
+    .circle {
+        box-sizing: border-box;
+    }
+    .circle svg {
+        transform: rotate(-90deg);
+    }
+
+    #secdot1, #secdot2, #mindot1, #mindot2, #hourdot1, #hourdot2 {
+        margin: 0 auto 0;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        z-index: 100;
+        top: 45px;
+        left: 160px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 2px 1px #fff, 0 0 4px 0px #fff, 0 0 11px 4px #fff;
+        transform-origin: 50% 105px;
+    }
+
+    .time {
+        position: absolute;
+        top: 100px;
+        left: 130px;
+
+        color: #fff;
+        font-size: 60px;
+        line-height: 70px;
+    }
+
+    .time-info {
+        position: absolute;
+        top: 160px;
+        left: 150px;
+
+        color: #fff;
+        font-size: 25px;
+        margin-left: 5px;
+    }
+
+    .ampm-info {
+        position: absolute;
+        top: 162px;
+        left: 140px;
+
+        color: #fff;
+        font-size: 25px;
+        margin-left: 5px;
+    }
+
+    </style>
 </head>
-
 <body>
-	<div class="clock">
-		<div class="time-box hour circle">
-			<svg class="hourCircle" xmlns="http://www.w3.org/2000/svg">
-				<circle id="hourCircle" class="transition-rotate" cx="50%" cy="50%" r="40%" stroke-width="5%"></circle>
-			</svg>
-			<span id="hourText" class="time">00</span>
-			<span class="time-info">h</span>
-		</div>
+    <div class="container vw-100 vh-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="circle">
+                    <svg x="0px" y="0px" width="300px" height="300px">
+                        <defs>
+                            <filter id="hourglow">
+                                <fegaussianblur class="blur" result="coloredBlur" stddeviation="2.5"></fegaussianblur>
+                                <femerge>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="SourceGraphic"></femergenode>
+                                </femerge>
+                            </filter>
+                        </defs>
+                        <circle 
+                        class="hourPath"
+                        stroke="#BBD2C5"
+                        fill="none" 
+                        stroke-width="1"
+                        cx="150" cy="150" r="100"></circle>
+                        <circle
+                        id="hour1" 
+                        class="hour"
+                        stroke="white"
+                        filter="url(#hourglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100"></circle>
+                        <circle
+                        id="hour2" 
+                        class="hour"
+                        stroke="white"
+                        filter="url(#hourglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100"></circle>
+                    </svg>
+                    <div id="hourdot1"></div>
+                    <div id="hourdot2"></div>
+                    <span id="hourText" class="time">00</span>
+			        <span class="ampm-info" id="ampm">am/pm</span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="circle">
+                    <svg x="0px" y="0px" width="300px" height="300px">
+                        <defs>
+                            <filter id="minuteglow">
+                                <fegaussianblur class="blur" result="coloredBlur" stddeviation="2.5"></fegaussianblur>
+                                <femerge>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="SourceGraphic"></femergenode>
+                                </femerge>
+                            </filter>
+                        </defs>
+                        <circle 
+                        class="minutePath"
+                        stroke="#BBD2C5"
+                        fill="none" 
+                        stroke-width="1"
+                        cx="150" cy="150" r="100"></circle>
+                        <circle
+                        id="minute1" 
+                        class="minute"
+                        stroke="white"
+                        filter="url(#minuteglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100"></circle>
+                        <circle
+                        id="minute2"  
+                        class="minute"
+                        stroke="white"
+                        filter="url(#minuteglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100"></circle>
+                    </svg>
+                    <div id="mindot1"></div>
+                    <div id="mindot2"></div>
+                    <span id="minuteText" class="time">00</span>
+			        <span class="time-info">m</span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="circle">
+                    <svg x="0px" y="0px" width="300px" height="300px">
+                        <defs>
+                            <filter id="secondglow">
+                                <fegaussianblur class="blur" result="coloredBlur" stddeviation="2.5"></fegaussianblur>
+                                <femerge>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="coloredBlur"></femergenode>
+                                    <femergenode in="SourceGraphic"></femergenode>
+                                </femerge>
+                            </filter>
+                        </defs>
+                        <circle 
+                        class="secondPath"
+                        stroke="#BBD2C5"
+                        fill="none" 
+                        stroke-width="1"
+                        cx="150" cy="150" r="100"></circle>
+                        <circle 
+                        id="second1"
+                        class="second"
+                        stroke="white"
+                        filter="url(#secondglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100">
+                        </circle>
+                        <circle
+                        id="second2" 
+                        class="second"
+                        stroke="white"
+                        filter="url(#secondglow)"
+                        fill="none" 
+                        stroke-width="2"
+                        cx="150" cy="150" r="100">
+                        </circle>
+                    </svg>
+                    <div id="secdot1"></div>
+                    <div id="secdot2"></div>
+                    <span id="secondText" class="time">00</span>
+                    <span class="time-info" style="font-size: 27px;">s</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		<div class="time-box minute circle">
-			<svg class="minuteCircle" xmlns="http://www.w3.org/2000/svg">
-				<circle id="minuteCircle" class="transition-rotate" cx="50%" cy="50%" r="40%" stroke-width="5%"></circle>
-			</svg>
-			<span id="minuteText" class="time">00</span>
-			<span class="time-info">m</span>
-		</div>
-		
-		<div class="time-box second circle">
-			<svg class="secondCircle" xmlns="http://www.w3.org/2000/svg">
-				<circle id="secondCircle" class="transition-rotate" cx="50%" cy="50%" r="40%" stroke-width="5%"></circle>
-			</svg>
-			<span id="secondText" class="time">00</span>
-			<span class="time-info">s</span>
-		</div>
-	</div>
+<script src="./js/jquery-3.4.1.min.js"></script>
+<script src="./js/anime.min.js"></script>
+<script>
+$(function(){
 
-	<script src="src/index.js"></script>
+    // 顯示時間
+    let clock = () => {
+            let date = new Date()
+            let h = date.getHours()
+            // 顯示 AM/PM
+            let ampm = document.getElementById('ampm')
+            if(h>6 && h<18){
+                ampm.innerText = 'AM'
+            }else{
+                ampm.innerText = 'PM'  
+            }
+            h = (h > 12) ? '0' + (h - 12) : h
+            let m = date.getMinutes()
+            m = (m < 10) ? '0' + m : m
+            let s = date.getSeconds()
+            s = (s < 10) ? '0' + s : s
+            // let y = date.getFullYear();
+            // let mon = date.getMonth()+1;
+            // let d = date.getDate();
+            let sec = document.getElementById('secondText')
+            let min = document.getElementById('minuteText')
+            let hr = document.getElementById('hourText')
+
+            sec.innerText = s
+            min.innerText = m
+            hr.innerText = h
+        }
+    clock();
+    setInterval(clock, 1000)
+
+    // 求圓周
+    let len = 2*($('.second').attr('r'))*Math.PI
+    $('.second, .minute, .hour').css('stroke-dasharray', `${len}`)
+
+    // 取日期
+    let date = new Date
+    let seconds = date.getSeconds()
+    let minutes = date.getMinutes()
+    let hours = date.getHours()
+    hours = (hours > 12) ? (hours - 12) : hours
+
+    // 取預設長度
+    let hourLen = len - (len/720)*((hours*60)+minutes)
+    let minuteLen = len - (len/3600)*((minutes*60)+seconds)
+    let secondLen = len - (len/60)*seconds
+
+    // 取預設角度
+    let hourAngle = (hours*60)+minutes
+    let minAngle = (minutes*60)+seconds
+    
+    // 時間旋轉函式
+    let rotate = () => {
+        // 小時旋轉
+        timeRotate(hourAngle,hourLen,'#hour1','#hourdot1','#hour2','#hourdot2',0.5,43200000,43200000-(hours*3600000)-(minutes*60000)-(seconds*1000))
+        // 分鐘旋轉
+        timeRotate(minAngle,minuteLen,'#minute1','#mindot1','#minute2','#mindot2',0.1,3600000,3600000-(minutes*60000)-(seconds*1000))
+        // 秒鐘旋轉
+        timeRotate(seconds,secondLen,'#second1','#secdot1','#second2','#secdot2',6,60000,(60-seconds)*1000)
+    }
+    rotate()
+    setInterval(rotate, 600000)
+
+    // 旋轉函式
+    function timeRotate(time,timeLen,circle1,dot1,circle2,dot2,angle,durtotal,dur) {
+        // 旋轉
+        $(circle1).show()
+        $(circle2).hide()
+        // 圓點
+        $(dot1).show()
+        $(dot2).hide()
+        anime({
+            targets: circle1,
+            strokeDashoffset: [timeLen, 0],
+            loop: 1,
+            easing: 'linear',
+            duration: dur
+        })
+        anime({
+            targets: dot1,
+            rotate: [angle*time, 360],
+            loop: 1,
+            easing: 'linear',
+            duration: dur
+        })
+        setTimeout(() => {
+            anime({
+                targets: circle2,
+                strokeDashoffset: [len, 0],
+                loop: true,
+                easing: 'linear',
+                duration: durtotal
+            })
+            $(circle1).hide()
+            $(circle2).show()
+            anime({
+                targets: dot2,
+                rotate: [0, 360],
+                loop: true,
+                easing: 'linear',
+                duration: durtotal
+            })
+            $(dot1).hide()
+            $(dot2).show()
+        }, dur)
+    }
+
+})
+</script>
 </body>
-
 </html>
