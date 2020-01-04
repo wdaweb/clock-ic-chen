@@ -236,7 +236,8 @@ $(function(){
             }else{
                 ampm.innerText = 'PM'  
             }
-            h = (h > 12) ? '0' + (h - 12) : h
+            h = (h > 12) ? (h - 12) : h
+            h = (h < 10) ? '0' + h : h
             let m = date.getMinutes()
             m = (m < 10) ? '0' + m : m
             let s = date.getSeconds()
@@ -254,41 +255,41 @@ $(function(){
         }
     clock();
     setInterval(clock, 1000)
-
-    // 求圓周
-    let len = 2*($('.second').attr('r'))*Math.PI
-    $('.second, .minute, .hour').css('stroke-dasharray', `${len}`)
-
-    // 取日期
-    let date = new Date
-    let seconds = date.getSeconds()
-    let minutes = date.getMinutes()
-    let hours = date.getHours()
-    hours = (hours > 12) ? (hours - 12) : hours
-
-    // 取預設長度
-    let hourLen = len - (len/720)*((hours*60)+minutes)
-    let minuteLen = len - (len/3600)*((minutes*60)+seconds)
-    let secondLen = len - (len/60)*seconds
-
-    // 取預設角度
-    let hourAngle = (hours*60)+minutes
-    let minAngle = (minutes*60)+seconds
     
     // 時間旋轉函式
     let rotate = () => {
+        // 求圓周
+        let len = 2*($('.second').attr('r'))*Math.PI
+        $('.second, .minute, .hour').css('stroke-dasharray', `${len}`)
+
+        // 取日期
+        let date = new Date
+        let seconds = date.getSeconds()
+        let minutes = date.getMinutes()
+        let hours = date.getHours()
+        hours = (hours > 12) ? (hours - 12) : hours
+
+        // 取預設長度
+        let hourLen = len - (len/720)*((hours*60)+minutes)
+        let minuteLen = len - (len/3600)*((minutes*60)+seconds)
+        let secondLen = len - (len/60)*seconds
+
+        // 取預設角度
+        let hourAngle = (hours*60)+minutes
+        let minAngle = (minutes*60)+seconds
+        
         // 小時旋轉
-        timeRotate(hourAngle,hourLen,'#hour1','#hourdot1','#hour2','#hourdot2',0.5,43200000,43200000-(hours*3600000)-(minutes*60000)-(seconds*1000))
+        timeRotate(hourAngle,len,hourLen,'#hour1','#hourdot1','#hour2','#hourdot2',0.5,43200000,43200000-(hours*3600000)-(minutes*60000)-(seconds*1000))
         // 分鐘旋轉
-        timeRotate(minAngle,minuteLen,'#minute1','#mindot1','#minute2','#mindot2',0.1,3600000,3600000-(minutes*60000)-(seconds*1000))
+        timeRotate(minAngle,len,minuteLen,'#minute1','#mindot1','#minute2','#mindot2',0.1,3600000,3600000-(minutes*60000)-(seconds*1000))
         // 秒鐘旋轉
-        timeRotate(seconds,secondLen,'#second1','#secdot1','#second2','#secdot2',6,60000,(60-seconds)*1000)
+        timeRotate(seconds,len,secondLen,'#second1','#secdot1','#second2','#secdot2',6,60000,(60-seconds)*1000)
     }
     rotate()
-    setInterval(rotate, 600000)
+    setInterval(rotate, 300000)
 
     // 旋轉函式
-    function timeRotate(time,timeLen,circle1,dot1,circle2,dot2,angle,durtotal,dur) {
+    function timeRotate(time,lentotal,timeLen,circle1,dot1,circle2,dot2,angle,durtotal,dur) {
         // 旋轉
         $(circle1).show()
         $(circle2).hide()
@@ -312,7 +313,7 @@ $(function(){
         setTimeout(() => {
             anime({
                 targets: circle2,
-                strokeDashoffset: [len, 0],
+                strokeDashoffset: [lentotal, 0],
                 loop: true,
                 easing: 'linear',
                 duration: durtotal
