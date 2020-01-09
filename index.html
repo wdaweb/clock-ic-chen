@@ -231,7 +231,7 @@ $(function(){
             let h = date.getHours()
             // 顯示 AM/PM
             let ampm = document.getElementById('ampm')
-            if(h>6 && h<18){
+            if(h>0 && h<12){
                 ampm.innerText = 'AM'
             }else{
                 ampm.innerText = 'PM'  
